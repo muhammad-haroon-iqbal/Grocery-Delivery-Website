@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import UseAppContext from "../context/UseAppContext";
 import { Link, useParams } from "react-router-dom";
 import { assets } from "../assets/assets";
+import ProductCard from "../components/ProductCard";
 const ProductDetails = () => {
   const { products, navigate, currency, addToCart } = UseAppContext();
   const { id } = useParams();
@@ -33,7 +34,7 @@ const ProductDetails = () => {
             {" "}
             {product.category}
           </Link>{" "}
-          /<span className="text-indigo-500"> {product.name}</span>
+          /<span className="text-primary"> {product.name}</span>
         </p>
 
         <div className="flex flex-col md:flex-row gap-16 mt-4">
@@ -93,7 +94,7 @@ const ProductDetails = () => {
             <div className="flex items-center mt-10 gap-4 text-base">
               <button
                 onClick={() => addToCart(product._id)}
-                className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition"
+                className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition rounded-md"
               >
                 Add to Cart
               </button>
@@ -102,12 +103,35 @@ const ProductDetails = () => {
                   addToCart(product._id);
                   navigate("/cart");
                 }}
-                className="w-full py-3.5 cursor-pointer font-medium bg-indigo-500 text-white hover:bg-indigo-600 transition"
+                className="w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition rounded-md"
               >
                 Buy now
               </button>
             </div>
           </div>
+        </div>
+        {/* Related Products */}
+        <div className="flex flex-col items-center mt-20">
+          <div className="flex flex-col items-center w-max">
+            <p className="text-3xl font-medium">Related Products</p>
+            <div className="w-20 h-0.5 bg-primary rounded-full mt-2"></div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mt-6 gap-3 md:gap-6 w-full">
+            {relatedProducts
+              .filter((product) => product.inStock)
+              .map((product, index) => (
+                <ProductCard key={index} product={product} />
+              ))}
+          </div>
+          <button
+            onClick={() => {
+              navigate("/products");
+              scrollTo(0, 0);
+            }}
+            className="cursor-pointer mx-auto px-12 my-16 py-2.5 border rounded text-primary hover:bg-primary/10 transition"
+          >
+            See More
+          </button>
         </div>
       </div>
     )
